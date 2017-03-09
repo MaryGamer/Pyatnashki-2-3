@@ -4,17 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pyatnaski23
+namespace Pyatnashki
 {
     class Point
     {
-        public int X { get; set; }
-        public int Y { get; set; }
+        public int Column { get; set; }
+        public int Row { get; set; }
 
         public Point(int x, int y)
         {
-            this.X = x;
-            this.Y = y;
+            this.Column = x;
+            this.Row = y;
         }
     }
 }

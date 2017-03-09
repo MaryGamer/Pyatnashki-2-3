@@ -29,7 +29,7 @@ namespace Pyatnashki
             fsw.Flush();
         }
 
-        public List<string> ReadLogs(int start_num)
+        public List<string> ReadLogs(int startNum)
         {
             fsw.Close();
 
@@ -40,7 +40,7 @@ namespace Pyatnashki
             while ((line = fsr.ReadLine()) != null)
             {
                 var tmp = line.Split(';');
-                if (int.Parse(tmp[0]) >= start_num)
+                if (int.Parse(tmp[0]) >= startNum)
                 {
                     rez.Add(line);
                 }

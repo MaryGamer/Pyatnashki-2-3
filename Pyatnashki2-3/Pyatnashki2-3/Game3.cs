@@ -9,45 +9,42 @@ namespace Pyatnashki
     class Game3 : Game2
     {
         int num;
+        History hst;
 
-        FileWorker fwr;
-
-        public Game3(int size) : base(size)
+        public Game3(params int[] val) : base(val)
         {
-            fwr = new FileWorker();
+            hst = new History();
             num = 0;
-            //    fsw = new System.IO.StreamWriter(filename); //не должно быть  в этом классе
         }
 
-        void SaveLog(int num, Point A, Point B)
+        public int NumTurns()
         {
-            // сформировать строку
-            string log = string.Empty;
-            log = string.Format("{0};{1};{2};{3};{4}", num, A.Row, A.Column, B.Row, B.Column);
-            // записать
-            fwr.WriteToLog(log);
+            return num;
         }
 
         public void Reverse(int back)
         {
-            var log = fwr.ReadLogs(num - back + 1);
-
-            for (int i = log.Count - 1; i >= 0; i--)
+            List<Turn> turns = hst.GetHist();
+            int cnt = turns.Count;
+            for (int i = cnt - 1; i >= cnt - back; i--)
             {
-                var tmp = log[i].Split(';');
-                Point A = new Point(int.Parse(tmp[1]), int.Parse(tmp[2]));
-                Point B = new Point(int.Parse(tmp[3]), int.Parse(tmp[4]));
-                base.swap(ref base.field[A.Row, A.Column], ref base.field[B.Row, B.Column]);
+                Point A = turns[i].A;
+                Point B = turns[i].B;
+
+                int val = base.field[A.Row, A.Column] > 0 ?
+                    base.field[A.Row, A.Column] : base.field[B.Row, B.Column];
+                base.Shift(val);
+                hst.DeleteLast();
             }
-
-            num = num - back + 1;
+            num = num - back;
         }
 
-        public override void Shift(int value) 
+        public override void Shift(int value)
         {
-            num++;
-            SaveLog(num, base.GetLocation(0), base.GetLocation(value));
             base.Shift(value);
+            num++;
+            this.hst.AddTurn(num, base.GetLocation(0), base.GetLocation(value));
         }
+
     }
 }

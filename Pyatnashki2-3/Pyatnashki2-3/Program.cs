@@ -9,8 +9,9 @@ namespace Pyatnashki
 {
     class Program
     {
-        static public void Print(Game gmb)
+        static public void Print(Game3 gmb)
         {
+            Console.WriteLine(string.Format("Ход № {0}", gmb.NumTurns()));
             for (int i = 0; i < gmb.Length; i++)
             {
                 for (int j = 0; j < gmb.Length; j++)
@@ -25,19 +26,9 @@ namespace Pyatnashki
         {
             try
             {
-                //Game2 gmb2 = new Game2(3);
-
-                //Console.WriteLine("Введите имя файла для чтения данных: ");
-                //string filename = Console.ReadLine();
-                //if (!File.Exists(filename)) throw new Exception("Нет такого файла");
-
-                //Game gmb = Game.ReadCSV(filename);
-
-                Game3 gmb = new Game3(3);
+                Game3 gmb = new Game3(1, 3, 2, 4, 5, 0, 7, 8, 6);
 
                 Print(gmb);
-
-                int n = 0;
 
                 while (!gmb.IsEndGame())
                 {
@@ -53,7 +44,6 @@ namespace Pyatnashki
                         else
                         {
                             gmb.Shift(val);
-                            n++;
                         }
 
                     }
@@ -63,7 +53,7 @@ namespace Pyatnashki
                     }
                     Print(gmb);
                 }
-                Console.WriteLine("Поздравляем! Игра завершена за {0} ходов!", n);
+                Console.WriteLine("Поздравляем! Игра завершена за {0} ходов!", gmb.NumTurns());
             }
             catch (Exception ex) //возможные ошибки при создании игры
             {

@@ -8,36 +8,50 @@ namespace Pyatnashki
 {
     class Game2 : Game
     {
-        public Game2(int size)
+        public Game2(params int[] val)
         {
+            const int rndIter = 11;
+
+            base.CheckIt(val);
+
+            int size = (int)Math.Sqrt(val.Length);
             int[,] mas = new int[size, size];
 
             for (int i = 0; i < size; i++)
             {
                 for (int j = 0; j < size; j++)
                 {
-                    mas[i, j] = i * size + j;
+                    mas[i, j] = val[i * size + j];
                 }
             }
 
-            for (int i = 0; i < 10; i++)
+            for (int k = 0; k < rndIter; k++)
             {
-                // составить массив соседей нуля
-                List<Point> neighbours = new List<Point>();
+                List<Point> neigbours = new List<Point>();  
+                Point ZeroPos = new Point(-1, -1);
+                Point SwapPoz = new Point(-1, -1);
 
-                //Point Loc0 = GetLocation(0);
-                //if (Loc0.row - 1 >= 0) neighbours.Add(new Point(Loc0.col, Loc0.row - 1));                 
-                //if (Loc0.row + 1 <= size - 1) neighbours.Add(new Point(Loc0.col, Loc0.row + 1));
-                //if (Loc0.col - 1 >= 0) neighbours.Add(new Point(Loc0.col - 1, Loc0.row));
-                //if (Loc0.col + 1 <= size - 1) neighbours.Add(new Point(Loc0.col + 1, Loc0.row));
+                for (int i = 0; i < size; i++)
+                {
+                    for (int j = 0; j < size; j++)
+                    {
+                        if (mas[i, j] == 0)
+                        {
+                            ZeroPos = new Point(j, i);
+                            if (i - 1 >= 0) neigbours.Add(new Point(j, i - 1));
+                            if (i + 1 <= size - 1) neigbours.Add(new Point(j, i + 1));
+                            if (j - 1 >= 0) neigbours.Add(new Point(j - 1, i));
+                            if (j + 1 <= size - 1) neigbours.Add(new Point(j + 1, i));
+                        }
+                    }
+                }
 
-                //// выбрать из него случайное число
-
-                //Random rnd = new Random(DateTime.Now.Millisecond);
-                //Point LocS = neighbours[rnd.Next(neighbours.Count - 1)];
-
-                //// поменять местами с нулем
-                //swap(ref mas[LocS.row, LocS.col], ref mas[Loc0.row, Loc0.col]);
+                if (neigbours.Count > 0)
+                {
+                    Random rnd = new Random(DateTime.Now.Millisecond); 
+                    SwapPoz = neigbours[rnd.Next(neigbours.Count - 1)];
+                    swap(ref mas[ZeroPos.Row, ZeroPos.Column], ref mas[SwapPoz.Row, SwapPoz.Column]);
+                }
             }
 
             List<int> lst = new List<int>();
@@ -48,7 +62,6 @@ namespace Pyatnashki
                     lst.Add(mas[i, j]);
                 }
             }
-
             this.Inicialize(lst.ToArray());
         }
 
@@ -58,10 +71,8 @@ namespace Pyatnashki
             {
                 for (int j = 0; j < size; j++)
                 {
-                    if (field[i, j] != (i * size + j + 1) && (i != size - 1 || j != size - 1))
-                        return false;
-                    if (field[i, j] != 0 && i == size - 1 && j == size - 1)
-                        return false;
+                    if ((field[i, j] != (i * size + j + 1) && (i != size - 1 || j != size - 1)) ||
+                        (field[i, j] != 0 && i == size - 1 && j == size - 1)) return false;
                 }
             }
             return true;

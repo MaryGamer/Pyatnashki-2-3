@@ -17,10 +17,11 @@ namespace Pyatnashki
         
         public Game(params int[] val)
         {
+            this.CheckIt(val);
             this.Inicialize(val);
         }
 
-        protected void Inicialize(params int[] val)
+        protected void CheckIt(params int[] val)
         {
             if (Math.Sqrt(val.Length) != (int)Math.Sqrt(val.Length))
             {
@@ -41,13 +42,15 @@ namespace Pyatnashki
 
             for (int i = 0; i < copy.Length; i++)
             {
-                if (copy[i] != i)
-                    throw new ArgumentException("Исходный массив содержит повторяющиеся числа");
+                if (copy[i] != i) throw new ArgumentException("Исходный массив содержит повторяющиеся числа");
             }
+        }
 
+        protected void Inicialize(params int[] val)
+        {
             size = (int)Math.Sqrt(val.Length);
             field = new int[size, size];
-            points = new Point[copy.Length];
+            points = new Point[val.Length];
 
             for (int i = 0; i < size; i++)
             {
